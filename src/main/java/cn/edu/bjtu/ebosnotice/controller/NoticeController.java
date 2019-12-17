@@ -3,6 +3,7 @@ package cn.edu.bjtu.ebosnotice.controller;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.command.ActiveMQMapMessage;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,6 +16,7 @@ import java.util.Map;
 public class NoticeController {
     private static ConnectionFactory connectionFactory = new ActiveMQConnectionFactory();
 
+    @CrossOrigin
     @GetMapping("/alert")
     public String getAlert(){
         try {
