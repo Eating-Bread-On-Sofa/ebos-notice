@@ -19,18 +19,13 @@ public class NoticeController {
 
     @CrossOrigin
     @GetMapping("/alert")
-    public String getAlert(){
-        try {
-            MqConsumer mqConsumer = mqFactory.createConsumer("notice");
-            while (true) {
-                try {
-                    JSONObject msg = JSON.parseObject(mqConsumer.subscribe());
-                    String alert = msg.getString("content");
-                    return alert;
-                }catch (Exception e){
-                    return null;
-                }
-            }
-        }catch (Exception e){e.printStackTrace();return null;}
+    public String getAlert() {
+        MqConsumer mqConsumer = mqFactory.createConsumer("notice");
+        while (true) {
+            JSONObject msg = JSON.parseObject(mqConsumer.subscribe());
+            String alert = msg.getString("content");
+            return alert;
+
+        }
     }
 }
