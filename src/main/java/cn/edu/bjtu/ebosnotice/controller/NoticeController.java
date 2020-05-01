@@ -1,36 +1,25 @@
 package cn.edu.bjtu.ebosnotice.controller;
 
-import cn.edu.bjtu.ebosnotice.service.MqConsumer;
-import cn.edu.bjtu.ebosnotice.service.MqFactory;
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
+import cn.edu.bjtu.ebosnotice.dao.NoticeRepo;
+import cn.edu.bjtu.ebosnotice.entity.Notice;
+import com.alibaba.fastjson.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 
 @RequestMapping("/api/notice")
 @RestController
 public class NoticeController {
     @Autowired
-    MqFactory mqFactory;
+    NoticeRepo noticeRepo;
 
     @CrossOrigin
     @GetMapping("/alert")
-    public String getAlert(){
-        try {
-            MqConsumer mqConsumer = mqFactory.createConsumer("notice");
-            while (true) {
-                try {
-                    JSONObject msg = JSON.parseObject(mqConsumer.subscribe());
-                    String alert = msg.getString("content");
-                    return alert;
-                }catch (Exception e){
-                    return null;
-                }
-            }
-        }catch (Exception e){e.printStackTrace();return null;}
+    public JSONArray getByType(){
+        List<Notice> notices = noticeRepo.findByType("alert");
+        JSONArray jsonArray = new JSONArray();
+        jsonArray.addAll(notices);
+        return jsonArray;
     }
 }
