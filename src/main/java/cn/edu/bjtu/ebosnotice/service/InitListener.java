@@ -20,11 +20,13 @@ public class InitListener implements ApplicationRunner {
     MqFactory mqFactory;
     @Autowired
     NoticeRepo noticeRepo;
+    @Autowired
+    LogService logService;
     @Value("${mq}")
     private String name;
 
     @Override
-    public void run(ApplicationArguments arguments){
+    public void run(ApplicationArguments arguments) {
         new Thread(() -> {
             MqConsumer mqConsumer = mqFactory.createConsumer("notice");
             while (true) {
@@ -35,7 +37,7 @@ public class InitListener implements ApplicationRunner {
                     Notice notice = jsonObject.toJavaObject(Notice.class);
                     notice.setCreated(new Date());
                     noticeRepo.save(notice);
-                }catch (Exception ignored){}
+                }catch (Exception e){logService.error(e.toString());}
             }
         }).start();
     }
