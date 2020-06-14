@@ -37,7 +37,7 @@ public class InitListener implements ApplicationRunner {
                     Notice notice = jsonObject.toJavaObject(Notice.class);
                     notice.setCreated(new Date());
                     noticeRepo.save(notice);
-                }catch (Exception e){logService.error(e.toString());}
+                }catch (Exception e){logService.error(null,e.toString());}
             }
         }).start();
     }
